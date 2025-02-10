@@ -23,3 +23,22 @@ resource "aws_iam_user_policy_attachment" "test_attachment" {
 # resource "aws_iam_account_alias" "test_account_alias" {
 #   account_alias = "non-linear-trap"
 # }
+
+
+resource "aws_iam_group" "test_group" {
+  name = var.aws_iam_group_name
+}
+
+data "aws_iam_policy" "iamadmin_group_policy" {
+  arn = var.aws_iam_group_policy_arn
+}
+
+resource "aws_iam_group_policy_attachment" "test-group-attach" {
+  group      = aws_iam_group.test_group.name
+  policy_arn = data.aws_iam_policy.iamadmin_group_policy.arn
+}
+
+resource "aws_iam_user_group_membership" "test_user_group_attach" {
+  user   = aws_iam_user.test.name
+  groups = [aws_iam_group.test_group.name]
+}
