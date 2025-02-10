@@ -1,6 +1,12 @@
 variable "aws_iam_username" {
-  type        = string
-  default     = "iamadmin-tf"
+  type = map(string)
+  # default     = ["iamadmin-tf1", "iamadmin-tf2", "iamadmin-tf3", "iamadmin-tf4"]
+  default = {
+    "iamadmin-tf1" = "user1"
+    "iamadmin-tf2" = "user2"
+    "iamadmin-tf3" = "user3"
+    "iamadmin-tf4" = "user4"
+  }
   description = "Name of the iam user"
 }
 

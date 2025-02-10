@@ -1,10 +1,14 @@
 resource "aws_iam_user" "test" {
-  name = var.aws_iam_username
-  tags = var.aws_iam_username_tags
+  for_each = var.aws_iam_username
+  name     = each.key
+  tags = {
+    name = "tf-created-${each.value}"
+  }
 }
 
 resource "aws_iam_user_login_profile" "test_user_login_profile" {
-  user                    = aws_iam_user.test.name
+  for_each                = var.aws_iam_username
+  user                    = aws_iam_user.test[each.key].name
   password_length         = var.aws_iam_user_login_profile_password_len
   password_reset_required = false
   # pgp_key = "keybase:your_key" can be used if the password requires encoding 
@@ -16,8 +20,9 @@ data "aws_iam_policy" "iamadmin_policy" {
 }
 
 resource "aws_iam_user_policy_attachment" "test_attachment" {
+  for_each   = var.aws_iam_username
   policy_arn = data.aws_iam_policy.iamadmin_policy.arn
-  user       = aws_iam_user.test.name
+  user       = aws_iam_user.test[each.key].name
 }
 
 # resource "aws_iam_account_alias" "test_account_alias" {
@@ -39,6 +44,7 @@ resource "aws_iam_group_policy_attachment" "test-group-attach" {
 }
 
 resource "aws_iam_user_group_membership" "test_user_group_attach" {
-  user   = aws_iam_user.test.name
-  groups = [aws_iam_group.test_group.name]
+  for_each = var.aws_iam_username
+  user     = aws_iam_user.test[each.key].name
+  groups   = [aws_iam_group.test_group.name]
 }
