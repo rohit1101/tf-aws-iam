@@ -28,7 +28,7 @@ This repository contains a Terraform automation script to manage AWS IAM resourc
 2. Export AWS credentials
    ```bash
    export AWS_ACCESS_KEY_ID="your_access_key_id"
-    export AWS_SECRET_ACCESS_KEY="your_secret_access_key"
+   export AWS_SECRET_ACCESS_KEY="your_secret_access_key"
    ```  
 3. Initialize Terraform:
    ```bash
