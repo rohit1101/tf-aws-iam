@@ -48,3 +48,34 @@ resource "aws_iam_user_group_membership" "test_user_group_attach" {
   user     = aws_iam_user.test[each.key].name
   groups   = [aws_iam_group.test_group.name]
 }
+
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+  
+  principals {
+    type= "Service"
+    identifiers=["lambda.amazonaws.com" ]
+  }
+  actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "test_role" {
+  name="test-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  tags={
+    "created_by":"tf-created-role"
+  }
+}
+
+data "aws_iam_policy" "iamadmin_role_policy" {
+  # name = "test-role-policy"
+  arn = var.aws_iam_role_policy_arn
+}
+
+resource "aws_iam_role_policy_attachment" "test_role_attach" {
+  policy_arn = data.aws_iam_policy.iamadmin_role_policy.arn
+  role= aws_iam_role.test_role.name
+
+}

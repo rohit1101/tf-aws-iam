@@ -50,3 +50,10 @@ variable "aws_iam_group_policy_arn" {
   default     = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
   description = "AWS Managed IAM Admin Access Policy ARN"
 }
+
+variable "aws_iam_role_policy_arn" {
+  type = string
+  # default     = "arn:aws:iam::aws:policy/AdministratorAccess"
+  default     = "arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole"
+  description = "AWS Managed IAM Admin Access Policy ARN"
+}
